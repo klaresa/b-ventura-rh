@@ -20,6 +20,7 @@ export class UpdateRespostaDto extends PartialType(CreateRespostaDto) {
         endereco: string
       }
     }
+    status: boolean
     habilidades: Requisitos
   }
   pontuacao: Pontuacao

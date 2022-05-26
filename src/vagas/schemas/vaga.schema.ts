@@ -14,8 +14,14 @@ export class Vaga {
   @Prop({ type: () => Empresa, required: true })
   empresa: Empresa
 
+  @Prop({ required: true })
+  status: boolean
+
   @Prop({ type: () => Requisitos, required: true })
   habilidades: Requisitos
+
+  //@Prop()
+  //finalizada: boolean;
 }
 
 export const VagaSchema = SchemaFactory.createForClass(Vaga);

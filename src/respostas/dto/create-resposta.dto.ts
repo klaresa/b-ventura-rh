@@ -18,6 +18,7 @@ export class CreateRespostaDto {
         endereco: string
       }
     }
+    status: boolean
     habilidades: Requisitos
   }
   pontuacao: Pontuacao

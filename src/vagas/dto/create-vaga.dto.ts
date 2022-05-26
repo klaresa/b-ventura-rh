@@ -9,5 +9,6 @@ export class CreateVagaDto {
       endereco: string
     }
   }
+  status: boolean
   habilidades: Requisitos
 }

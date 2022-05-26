@@ -12,6 +12,7 @@ export class VagasService {
     return this.vagasRepository.create({
       nome: createVagaDto.nome,
       empresa: createVagaDto.empresa,
+      status: createVagaDto.status,
       habilidades: createVagaDto.habilidades
     });
   }

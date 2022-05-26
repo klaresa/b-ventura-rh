@@ -11,5 +11,6 @@ export class UpdateVagaDto extends PartialType(CreateVagaDto) {
       endereco: string
     }
   }
+  status: boolean
   habilidades: Requisitos
 }

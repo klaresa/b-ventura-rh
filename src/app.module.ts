@@ -9,10 +9,13 @@ import { RespostasModule } from './respostas/respostas.module';
 // import { AuthModule } from './auth/auth.module';
 // import { UsersModule } from './users/users.module';
 
+import { ConfigModule } from '@nestjs/config';
+
 @Module({
     imports: [
+      ConfigModule.forRoot(),
       // aqui vai o string de conexao do banco
-      MongooseModule.forRoot('mongodb+srv://klaresa:rJYpquoM8rNUWQtp@funcao.krniz.mongodb.net/rh?retryWrites=true&w=majority'),
+      MongooseModule.forRoot(process.env.MONGO_STRING),
       // MongooseModule.forFeature([{
       //   name: Candidato.name,
       //   schema: CandidatoSchema,
