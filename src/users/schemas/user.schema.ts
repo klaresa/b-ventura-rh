@@ -7,11 +7,11 @@ export type UserDocument = UserEntity & Document;
 
 @Schema()
 export class User {
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true, index: true,  })
   username: string;
 
   @Prop({ required: true })
-  password: string
+  password: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

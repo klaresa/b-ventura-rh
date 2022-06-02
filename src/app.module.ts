@@ -6,8 +6,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { EmpresasModule } from './empresas/empresas.module';
 import { VagasModule } from './vagas/vagas.module';
 import { RespostasModule } from './respostas/respostas.module';
-// import { AuthModule } from './auth/auth.module';
-// import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 
 import { ConfigModule } from '@nestjs/config';
 
@@ -25,8 +25,8 @@ import { ConfigModule } from '@nestjs/config';
       EmpresasModule,
       VagasModule,
       RespostasModule,
-      // AuthModule,
-      // UsersModule
+      AuthModule,
+      UsersModule
     ],
   controllers: [AppController],
   providers: [AppService],

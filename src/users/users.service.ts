@@ -1,31 +1,44 @@
-// import { Injectable } from '@nestjs/common';
-// import { UsersRepository } from '../users/users.repository';
-//
-// export type User = any;
-//
-// @Injectable()
-// export class UsersService {
-//   private readonly users = [
-//     {
-//       userId: 1,
-//       username: 'john',
-//       password: 'changeme',
-//     },
-//     {
-//       userId: 2,
-//       username: 'maria',
-//       password: 'guess',
-//     },
-//   ];
-//
-//   constructor(private readonly usersRepository: UsersRepository) {}
-//
-//
-//   async create(username: string, password: string) {
-//
-//   }
-//
-//   async findOne(username: string): Promise<User | undefined> {
-//     return this.users.find(user => user.username === username);
-//   }
-// }
+import { HttpException, Injectable } from '@nestjs/common';
+import { UsersRepository } from './users.repository';
+import { CreateUserDto } from './dto/create-user.dto';
+import * as bcrypt from 'bcrypt';
+
+export type User = any;
+
+@Injectable()
+export class UsersService {
+  constructor(private readonly usersRepository: UsersRepository) {}
+
+  async create(userDto: CreateUserDto) {
+    const userExists = await this.findUniqueUser(userDto.username);
+
+    if (!userExists) {
+      const hash = await bcrypt.hash(userDto.password, 8);
+      if (hash) {
+        const user = await this.usersRepository.create({
+          username: userDto.username,
+          password: hash
+        });
+        return { username: user.username }
+      }
+    }
+    throw new HttpException('user exists', 400);
+  }
+
+  async findUniqueUser(username: string): Promise<User | undefined> {
+    const user = await this.usersRepository.findOne({ username: username } );
+    if (user) {
+      return user
+    }
+    throw new HttpException('invalid user/password', 404);
+  }
+
+  async findOne(username: string): Promise<User | undefined> {
+    const user = await this.usersRepository.findOne({ username: username } );
+    if (user) {
+      return { username: username }
+    }
+    throw new HttpException('not found', 404);
+
+  }
+}
