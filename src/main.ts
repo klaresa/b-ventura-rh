@@ -8,6 +8,10 @@ import * as passport from 'passport';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
   // app.useGlobalFilters(new HttpExceptionFilter());
+  app.enableCors({
+    origin: '*',
+    methods: ['POST', 'PUT', 'DELETE', 'GET']
+  });
 
   app.use(session({
     secret: process.env.SESS,
@@ -19,7 +23,8 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
   app.use(passport.initialize());
-  app.use(passport.session());
+  app.use(passport.session())
+
   await app.listen(3000);
 }
 bootstrap();

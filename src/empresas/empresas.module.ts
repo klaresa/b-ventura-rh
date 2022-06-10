@@ -4,6 +4,7 @@ import { EmpresasController } from './empresas.controller';
 import { EmpresasService } from './empresas.service';
 import { EmpresasRepository } from './empresas.repository';
 import { Empresa, EmpresaSchema } from './schemas/empresa.schema';
+import { UsersModule } from '../users/users.module';
 
 @Module({
   imports : [ MongooseModule.forFeature([{
@@ -11,6 +12,7 @@ import { Empresa, EmpresaSchema } from './schemas/empresa.schema';
     schema: EmpresaSchema,
     collection: 'empresas'
   }]),
+    UsersModule,
   ],
   controllers: [EmpresasController],
   providers: [EmpresasService, EmpresasRepository]

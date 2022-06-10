@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import {
   Controller,
   Get,
@@ -8,21 +9,47 @@ import {
   Delete,
   HttpException,
   HttpStatus,
-  UseFilters,
+  UseFilters, UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+
+import { UsersService } from '../users/users.service';
 import { EmpresasService } from './empresas.service';
-import { CreateEmpresaDto } from './dto/create-empresa.dto';
+
 import { UpdateEmpresaDto } from './dto/update-empresa.dto';
-import mongoose from "mongoose";
+import { RegisterEmpresaDto } from './dto/register-empresa.dto';
+
 import { HttpExceptionFilter } from '../candidatos/http-exception.filter';
 
 @Controller('empresas')
+@UseGuards(AuthGuard('jwt'))
 export class EmpresasController {
-  constructor(private readonly empresasService: EmpresasService) {}
+  constructor(
+    private readonly empresasService: EmpresasService,
+    private readonly usersService: UsersService
+  ) {}
 
   @Post()
-  async create(@Body() createEmpresaDto: CreateEmpresaDto) {
-    return this.empresasService.create(createEmpresaDto);
+  async create(@Body() registerEmpresaDto: RegisterEmpresaDto) {
+
+    // separar o email e senha para a criacao do user c/ userService
+    const newUser = await this.usersService.create({
+      type: registerEmpresaDto.type,
+      username: registerEmpresaDto.username,
+      password: registerEmpresaDto.password
+    });
+
+    console.log('newuser', newUser);
+
+    // retornar o user criado e cadastrar o candidato com o userID
+    // na pior das hipoteses usar o username p achar
+    return await this.empresasService.create({
+      nome: registerEmpresaDto.nome,
+      contato: {
+        telefone: registerEmpresaDto.contato.telefone,
+        endereco: registerEmpresaDto.contato.endereco
+      }
+    });
   }
 
   @Get()

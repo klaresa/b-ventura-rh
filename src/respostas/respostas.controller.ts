@@ -1,10 +1,23 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  HttpException,
+  HttpStatus,
+  UseGuards,
+} from '@nestjs/common';
 import { RespostasService } from './respostas.service';
 import { CreateRespostaDto } from './dto/create-resposta.dto';
 import { UpdateRespostaDto } from './dto/update-resposta.dto';
 import mongoose from "mongoose";
+import { AuthenticatedGuard } from '../auth/authenticated.guard';
 
 @Controller('respostas')
+@UseGuards(AuthenticatedGuard)
 export class RespostasController {
   constructor(private readonly respostasService: RespostasService) {}
 

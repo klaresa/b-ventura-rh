@@ -4,6 +4,7 @@ import { Candidato } from './schemas/candidato.schema';
 import { CreateCandidatoDto } from './dto/create-candidato.dto';
 import { UpdateCandidatoDto } from './dto/update-candidato.dto';
 import { UsersService } from '../users/users.service';
+import { CreatedCandidato } from './schemas/created-candidato-schema';
 
 @Injectable()
 export class CandidatosService {

@@ -13,7 +13,7 @@ import {
 import { UsersService } from './users.service';
 import { HttpExceptionFilter } from '../candidatos/http-exception.filter';
 import { CreateUserDto } from './dto/create-user.dto';
-import { LocalAuthGuard } from '../auth/local-auth.guard';
+import { LocalAuthGuard } from '../auth/strategy/local/local-auth.guard';
 
 @Controller('user')
 export class UsersController {
@@ -34,9 +34,9 @@ export class UsersController {
     throw new HttpException('Invalid Id', HttpStatus.BAD_REQUEST);
   }
 
-  @UseGuards(LocalAuthGuard)
-  @Post('test')
-  test(@Request() req): any {
-    return req.isAuthenticated()
-  }
+  // @UseGuards(LocalAuthGuard)
+  // @Post('test')
+  // test(@Request() req): any {
+  //   return req.isAuthenticated()
+  // }
 }

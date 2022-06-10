@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import {
   Controller,
   Get,
@@ -5,25 +6,48 @@ import {
   Body,
   Patch,
   Param,
-  Delete, UseFilters, HttpException, HttpStatus, ValidationPipe, UsePipes,
+  Delete, UseFilters, HttpException, HttpStatus, ValidationPipe, UsePipes, UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+
 import { CandidatosService } from './candidatos.service';
-import { CreateCandidatoDto } from './dto/create-candidato.dto';
-import { UpdateCandidatoDto } from './dto/update-candidato.dto';
+import { UsersService } from '../users/users.service';
+
 import { HttpExceptionFilter } from './http-exception.filter';
-import mongoose from 'mongoose';
+
+import { UpdateCandidatoDto } from './dto/update-candidato.dto';
+import { RegisterCandidatoDto } from './dto/register-candidato.dto';
 
 @Controller('candidatos')
+@UseGuards(AuthGuard('jwt'))
 @UsePipes(new ValidationPipe({ transform: true }))
 export class CandidatosController {
-  constructor(private readonly candidatosService: CandidatosService) {}
+  constructor(
+    private readonly candidatosService: CandidatosService,
+    private readonly usersService: UsersService
+  ) {}
 
   @Post()
   @UseFilters(new HttpExceptionFilter())
-  async create(@Body() createCandidatoDto: CreateCandidatoDto) {
-    // if (createCandidatoDto !instanceof CreateCandidatoDto) throw new HttpException(
-    //   'Invalid request', HttpStatus.BAD_REQUEST);
-    return this.candidatosService.create(createCandidatoDto);
+  async create(@Body() registerCandidatoDto: RegisterCandidatoDto) {
+
+    const newUser = await this.usersService.create({
+      type: registerCandidatoDto.type,
+      username: registerCandidatoDto.username,
+      password: registerCandidatoDto.password
+    });
+
+    console.log('newuser', newUser);
+
+    // retornar o user criado e cadastrar o candidato com o userID
+    // na pior das hipoteses usar o username p achar
+    return await this.candidatosService.create({
+      nome: registerCandidatoDto.nome,
+      contato: {
+        telefone: registerCandidatoDto.contato.telefone,
+        endereco: registerCandidatoDto.contato.endereco
+      }
+    });
   }
 
   @Get()

@@ -15,14 +15,12 @@ import { UsersRepository } from '../users/users.repository';
     schema: CandidatoSchema,
     collection: 'candidatos'
   }]),
-    // UsersModule,
-    // UsersService,
-    // UsersRepository
+    UsersModule,
   ],
   controllers: [CandidatosController],
   providers: [
     // UsersModule, UsersService, UsersRepository,
-    CandidatosService, CandidatosRepository
+    CandidatosService, CandidatosRepository,
   ],
 })
 export class CandidatosModule {}
