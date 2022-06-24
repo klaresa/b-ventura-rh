@@ -11,6 +11,9 @@ export class Vaga {
   @Prop({ required: true })
   nome: string;
 
+  @Prop({ required: true })
+  descricao: string;
+
   @Prop({ type: () => Empresa, required: true })
   empresa: Empresa
 

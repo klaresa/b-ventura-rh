@@ -13,6 +13,7 @@ export class UpdateRespostaDto extends PartialType(CreateRespostaDto) {
   }
   vaga: {
     nome: string
+    descricao: string
     empresa: {
       nome: string
       contato: {

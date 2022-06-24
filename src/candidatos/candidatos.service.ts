@@ -3,8 +3,6 @@ import { CandidatosRepository } from './candidatos.repository';
 import { Candidato } from './schemas/candidato.schema';
 import { CreateCandidatoDto } from './dto/create-candidato.dto';
 import { UpdateCandidatoDto } from './dto/update-candidato.dto';
-import { UsersService } from '../users/users.service';
-import { CreatedCandidato } from './schemas/created-candidato-schema';
 
 @Injectable()
 export class CandidatosService {
@@ -16,26 +14,32 @@ export class CandidatosService {
   // salvar o usuario no banco e com o id criado retorna o userId vinculado ao candidato
 
   async create(createCandidatoDto: CreateCandidatoDto): Promise<Candidato> {
-
     return this.candidatosRepository.create({
       nome: createCandidatoDto.nome,
       contato: createCandidatoDto.contato
     });
   }
 
-  findAll(): Promise<Candidato[]> {
-    return this.candidatosRepository.findAll();
+  async findAll(): Promise<Candidato[]> {
+    return await this.candidatosRepository.findAll();
   }
 
-  findOne(id: string): Promise<Candidato> {
-    return this.candidatosRepository.findOne({ _id: id });
+  async findOne(id: string): Promise<Candidato> {
+    return await this.candidatosRepository.findOne({ _id: id });
   }
 
-  update(id: string, updateCandidatoDto: UpdateCandidatoDto): Promise<Candidato> {
-    return this.candidatosRepository.update({ id }, updateCandidatoDto);
+  async update(id: string, updateCandidatoDto: UpdateCandidatoDto): Promise<Candidato> {
+    if (id === updateCandidatoDto.id) {
+      try {
+        const user = await this.findOne(id);
+        if (user) return await this.candidatosRepository.update({ id }, updateCandidatoDto);
+      } catch (e) {
+        throw new Error('you have no authorization');
+      }
+    }
   }
 
-  remove(id: string) {
-    return this.candidatosRepository.remove({ id });
+  async remove(id: string) {
+    return await this.candidatosRepository.remove({ id });
   }
 }

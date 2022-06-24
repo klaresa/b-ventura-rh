@@ -4,9 +4,16 @@ import {
   Get,
   Post,
   Body,
-  Patch,
+  Request,
   Param,
-  Delete, UseFilters, HttpException, HttpStatus, ValidationPipe, UsePipes, UseGuards,
+  Delete,
+  UseFilters,
+  UsePipes,
+  UseGuards,
+  Put,
+  HttpException,
+  HttpStatus,
+  ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
@@ -19,7 +26,6 @@ import { UpdateCandidatoDto } from './dto/update-candidato.dto';
 import { RegisterCandidatoDto } from './dto/register-candidato.dto';
 
 @Controller('candidatos')
-@UseGuards(AuthGuard('jwt'))
 @UsePipes(new ValidationPipe({ transform: true }))
 export class CandidatosController {
   constructor(
@@ -30,7 +36,6 @@ export class CandidatosController {
   @Post()
   @UseFilters(new HttpExceptionFilter())
   async create(@Body() registerCandidatoDto: RegisterCandidatoDto) {
-
     const newUser = await this.usersService.create({
       type: registerCandidatoDto.type,
       username: registerCandidatoDto.username,
@@ -50,6 +55,7 @@ export class CandidatosController {
     });
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Get()
   @UseFilters(new HttpExceptionFilter())
   findAll() {
@@ -60,29 +66,36 @@ export class CandidatosController {
     }
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Get(':id')
   @UseFilters(new HttpExceptionFilter())
   findOne(@Param('id') id: string) {
     if (!mongoose.Types.ObjectId.isValid(id)) throw new HttpException(
       'Invalid Id', HttpStatus.NOT_FOUND);
-    return this.candidatosService.findOne(id);
+    try {
+      return this.candidatosService.findOne(id);
+    } catch (e) {
+      throw new HttpException(e.error, HttpStatus.NOT_FOUND);
+    }
   }
 
-  @Patch(':id')
+  @UseGuards(AuthGuard('jwt'))
+  @Put(':id')
   @UseFilters(new HttpExceptionFilter())
-  update(@Param('id') id: string, @Body() updateCandidatoDto: UpdateCandidatoDto) {
-    if (!mongoose.Types.ObjectId.isValid(id)) throw new HttpException(
-      'Invalid Id', HttpStatus.NOT_FOUND);
-
-    if (updateCandidatoDto !instanceof UpdateCandidatoDto) throw new HttpException(
-      'Invalid request', HttpStatus.BAD_REQUEST);
+  update(@Request() req, @Param('id') id: string, @Body() updateCandidatoDto: UpdateCandidatoDto) {
     return this.candidatosService.update(id, updateCandidatoDto);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string) {
     if (!mongoose.Types.ObjectId.isValid(id)) throw new HttpException(
       'Invalid Id', HttpStatus.NOT_FOUND);
-    return this.candidatosService.remove(id);
+
+    try {
+      return await this.candidatosService.remove(id);
+    } catch (e) {
+      throw new HttpException(e.error, HttpStatus.NOT_FOUND);
+    }
   }
 }

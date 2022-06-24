@@ -19,8 +19,8 @@ export class EmpresasService {
     return this.empresasRepository.findAll();
   }
 
-  findOne(id: string): Promise<Empresa> {
-    return this.empresasRepository.findOne({ _id: id });
+  async findOne(id: string): Promise<Empresa> {
+    return await this.empresasRepository.findOne({ _id: id });
   }
 
   update(id: string, updateEmpresaDto: UpdateEmpresaDto): Promise<Empresa> {

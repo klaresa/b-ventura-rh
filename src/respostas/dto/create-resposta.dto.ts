@@ -11,6 +11,7 @@ export class CreateRespostaDto {
   }
   vaga: {
     nome: string
+    descricao: string
     empresa: {
       nome: string
       contato: {

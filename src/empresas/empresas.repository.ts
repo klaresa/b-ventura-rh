@@ -17,7 +17,7 @@ export class EmpresasRepository {
   }
 
   async findOne(filterQuery: FilterQuery<Empresa>): Promise<Empresa> {
-    return this.model.findOne({ _id: filterQuery } );
+    return await this.model.findOne({ _id: filterQuery } );
   }
 
   async update(filterQuery: FilterQuery<Empresa>, empresa: Partial<Empresa>): Promise<Empresa> {

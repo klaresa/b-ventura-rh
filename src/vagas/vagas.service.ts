@@ -11,6 +11,7 @@ export class VagasService {
   async create(createVagaDto: CreateVagaDto): Promise<Vaga> {
     return this.vagasRepository.create({
       nome: createVagaDto.nome,
+      descricao: createVagaDto.descricao,
       empresa: createVagaDto.empresa,
       status: createVagaDto.status,
       habilidades: createVagaDto.habilidades

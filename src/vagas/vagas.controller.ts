@@ -30,6 +30,7 @@ export class VagasController {
 
   @Get()
   findAll() {
+    console.log('entrou aqui');
     return this.vagasService.findAll();
   }
 

@@ -9,7 +9,7 @@ import {
   Delete,
   HttpException,
   HttpStatus,
-  UseFilters, UseGuards,
+  UseFilters, UseGuards, Put,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
@@ -22,7 +22,6 @@ import { RegisterEmpresaDto } from './dto/register-empresa.dto';
 import { HttpExceptionFilter } from '../candidatos/http-exception.filter';
 
 @Controller('empresas')
-@UseGuards(AuthGuard('jwt'))
 export class EmpresasController {
   constructor(
     private readonly empresasService: EmpresasService,
@@ -52,24 +51,28 @@ export class EmpresasController {
     });
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Get()
   findAll() {
     return this.empresasService.findAll();
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Get(':id')
   @UseFilters(new HttpExceptionFilter())
-  findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string) {
     if (!mongoose.Types.ObjectId.isValid(id)) throw new HttpException('Invalid Id', HttpStatus.NOT_FOUND);
-    return this.empresasService.findOne(id);
+    return await this.empresasService.findOne(id);
   }
 
-  @Patch(':id')
+  @UseGuards(AuthGuard('jwt'))
+  @Put(':id')
   update(@Param('id') id: string, @Body() updateEmpresaDto: UpdateEmpresaDto) {
     if (!mongoose.Types.ObjectId.isValid(id)) throw new HttpException('Invalid Id', HttpStatus.NOT_FOUND);
     return this.empresasService.update(id, updateEmpresaDto);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
   remove(@Param('id') id: string) {
     if (!mongoose.Types.ObjectId.isValid(id)) throw new HttpException('Invalid Id', HttpStatus.NOT_FOUND);
