@@ -5,6 +5,7 @@ import { Requisitos } from '../../interfaces/requisitos.interface';
 export class UpdateVagaDto extends PartialType(CreateVagaDto) {
   nome: string
   empresa: {
+    userId: string
     nome: string
     contato: {
       telefone: string

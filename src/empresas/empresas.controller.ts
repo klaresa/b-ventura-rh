@@ -43,6 +43,7 @@ export class EmpresasController {
     // retornar o user criado e cadastrar o candidato com o userID
     // na pior das hipoteses usar o username p achar
     return await this.empresasService.create({
+      userId: newUser._id,
       nome: registerEmpresaDto.nome,
       contato: {
         telefone: registerEmpresaDto.contato.telefone,
@@ -61,8 +62,16 @@ export class EmpresasController {
   @Get(':id')
   @UseFilters(new HttpExceptionFilter())
   async findOne(@Param('id') id: string) {
-    if (!mongoose.Types.ObjectId.isValid(id)) throw new HttpException('Invalid Id', HttpStatus.NOT_FOUND);
+    // if (!mongoose.Types.ObjectId.isValid(id)) throw new HttpException('Invalid Id', HttpStatus.NOT_FOUND);
     return await this.empresasService.findOne(id);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get('find-by-userId/:userId')
+  @UseFilters(new HttpExceptionFilter())
+  async findByUserId(@Param('userId') userId: string) {
+    // if (!mongoose.Types.ObjectId.isValid(id)) throw new HttpException('Invalid Id', HttpStatus.NOT_FOUND);
+    return await this.empresasService.findByUserId(userId);
   }
 
   @UseGuards(AuthGuard('jwt'))

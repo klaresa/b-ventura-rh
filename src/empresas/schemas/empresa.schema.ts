@@ -7,6 +7,9 @@ export type EmpresaDocument = EmpresaEntity & Document;
 
 @Schema()
 export class Empresa {
+  @Prop()
+  userId: string;
+
   @Prop({ required: true })
   nome: string;
 

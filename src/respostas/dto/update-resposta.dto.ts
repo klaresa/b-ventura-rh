@@ -5,6 +5,7 @@ import { Pontuacao } from '../../interfaces/pontuacao.interface';
 
 export class UpdateRespostaDto extends PartialType(CreateRespostaDto) {
   candidato: {
+    userId: string
     nome: string
     contato: {
       telefone: string
@@ -15,6 +16,7 @@ export class UpdateRespostaDto extends PartialType(CreateRespostaDto) {
     nome: string
     descricao: string
     empresa: {
+      userId: string
       nome: string
       contato: {
         telefone: string

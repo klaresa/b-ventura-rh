@@ -15,6 +15,7 @@ export class CandidatosService {
 
   async create(createCandidatoDto: CreateCandidatoDto): Promise<Candidato> {
     return this.candidatosRepository.create({
+      userId: createCandidatoDto.userId,
       nome: createCandidatoDto.nome,
       contato: createCandidatoDto.contato
     });

@@ -7,6 +7,9 @@ export type CandidatoDocument = CandidatoEntity & Document;
 
 @Schema()
 export class Candidato {
+  @Prop()
+  userId: string
+
   @Prop({ required: true })
   nome: string;
 

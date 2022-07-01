@@ -10,6 +10,7 @@ export class EmpresasService {
 
   async create(createEmpresaDto: CreateEmpresaDto): Promise<Empresa> {
     return this.empresasRepository.create({
+      userId: createEmpresaDto.userId,
       nome: createEmpresaDto.nome,
       contato: createEmpresaDto.contato
     });
@@ -21,6 +22,10 @@ export class EmpresasService {
 
   async findOne(id: string): Promise<Empresa> {
     return await this.empresasRepository.findOne({ _id: id });
+  }
+
+  async findByUserId(userId: string): Promise<Empresa> {
+    return await this.empresasRepository.findByUserId({ userId: userId });
   }
 
   update(id: string, updateEmpresaDto: UpdateEmpresaDto): Promise<Empresa> {

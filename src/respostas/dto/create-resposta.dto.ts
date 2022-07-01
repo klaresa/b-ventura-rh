@@ -3,6 +3,7 @@ import { Pontuacao } from '../../interfaces/pontuacao.interface';
 
 export class CreateRespostaDto {
   candidato: {
+    userId: string
     nome: string
     contato: {
       telefone: string
@@ -13,6 +14,7 @@ export class CreateRespostaDto {
     nome: string
     descricao: string
     empresa: {
+      userId: string
       nome: string
       contato: {
         telefone: string
